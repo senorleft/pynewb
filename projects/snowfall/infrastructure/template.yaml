@@ -42,6 +42,39 @@ Resources:
             Schedule: rate(10 minutes)
             Enabled: true
 
+  # Lambda Function - API
+  ApiFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: SnowfallApi
+      Handler: handler.lambda_handler
+      Runtime: python3.12
+      CodeUri: ../lambda/api/
+      Timeout: 30
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref SnowfallTable
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref SnowfallTable
+      Events:
+        GetData:
+          Type: Api
+          Properties:
+            Path: /data
+            Method: get
+            RestApiId: !Ref SnowfallApi
+
+  # API Gateway
+  SnowfallApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: prod
+      Cors:
+        AllowMethods: "'GET,OPTIONS'"
+        AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+        AllowOrigin: "'*'"
+
 Outputs:
   TableName:
     Description: DynamoDB Table Name
@@ -49,3 +82,9 @@ Outputs:
   CollectorFunctionArn:
     Description: Collector Lambda ARN
     Value: !GetAtt CollectorFunction.Arn
+  ApiFunctionArn:
+    Description: API Lambda ARN
+    Value: !GetAtt ApiFunction.Arn
+  ApiUrl:
+    Description: API Gateway endpoint URL
+    Value: !Sub 'https://${SnowfallApi}.execute-api.${AWS::Region}.amazonaws.com/prod/data'
