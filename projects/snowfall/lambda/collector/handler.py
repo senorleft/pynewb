@@ -12,17 +12,32 @@ dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table(os.environ['TABLE_NAME'])
 
 # Station definitions
+
 STATIONS = {
+    # Chicago Metro
     'KORD': {'name': "Chicago O'Hare", 'lat': 41.9742, 'lon': -87.9073},
     'KMDW': {'name': 'Chicago Midway', 'lat': 41.7868, 'lon': -87.7522},
-    'KPWK': {'name': 'Chicago Executive', 'lat': 42.1142, 'lon': -87.9015},
     'KLOT': {'name': 'Romeoville/Lewis', 'lat': 41.6072, 'lon': -88.0959},
+    
+    # North Shore & Evanston Area
+    'KUGN': {'name': 'Waukegan', 'lat': 42.4222, 'lon': -87.8678},
+    
+    # West/Southwest Suburbs
+    'KDPA': {'name': 'DuPage/Naperville', 'lat': 41.9078, 'lon': -88.2486},
+    
+    # Indiana
     'KGYY': {'name': 'Gary/Chicago', 'lat': 41.6163, 'lon': -87.4128},
     'KSBN': {'name': 'South Bend', 'lat': 41.7087, 'lon': -86.3173},
-    'KBEH': {'name': 'Benton Harbor', 'lat': 42.1286, 'lon': -86.4285},
-    'KUGN': {'name': 'Waukegan', 'lat': 42.4222, 'lon': -87.8678},
-    'KDPA': {'name': 'DuPage/Naperville', 'lat': 41.9078, 'lon': -88.2486},
     'KMGC': {'name': 'Michigan City', 'lat': 41.7033, 'lon': -86.8211},
+    
+    # Michigan
+    'KBEH': {'name': 'Benton Harbor', 'lat': 42.1286, 'lon': -86.4285},
+    'KAZO': {'name': 'Kalamazoo', 'lat': 42.2350, 'lon': -85.5521},
+    'KGRR': {'name': 'Grand Rapids', 'lat': 42.8808, 'lon': -85.5228},
+    
+    # Wisconsin
+    'KMKE': {'name': 'Milwaukee', 'lat': 42.9472, 'lon': -87.8965},
+    'KGRB': {'name': 'Green Bay', 'lat': 44.4851, 'lon': -88.1296},
 }
 
 def get_station_data(station_code):
