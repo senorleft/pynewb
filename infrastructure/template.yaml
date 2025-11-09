@@ -1,0 +1,51 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Chicago Snowfall Tracker
+
+Resources:
+  # DynamoDB Table
+  SnowfallTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: ChicagoSnowfall
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: station_id
+          AttributeType: S
+        - AttributeName: timestamp
+          AttributeType: N
+      KeySchema:
+        - AttributeName: station_id
+          KeyType: HASH
+        - AttributeName: timestamp
+          KeyType: RANGE
+
+  # Lambda Function - Data Collector
+  CollectorFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: SnowfallCollector
+      Handler: handler.lambda_handler
+      Runtime: python3.12
+      CodeUri: ../lambda/collector/
+      Timeout: 60
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref SnowfallTable
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref SnowfallTable
+      Events:
+        CollectionSchedule:
+          Type: Schedule
+          Properties:
+            Schedule: rate(10 minutes)
+            Enabled: true
+
+Outputs:
+  TableName:
+    Description: DynamoDB Table Name
+    Value: !Ref SnowfallTable
+  CollectorFunctionArn:
+    Description: Collector Lambda ARN
+    Value: !GetAtt CollectorFunction.Arn
