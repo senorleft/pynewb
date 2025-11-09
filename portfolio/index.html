@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pynewb – A Lab of Tiny Systems</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
+            background: #0a0e1a;
+            color: #e0e0e0;
+            line-height: 1.6;
+            padding: 40px 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        header {
+            margin-bottom: 60px;
+            border-bottom: 2px solid #1a1f2e;
+            padding-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            color: #60a5fa;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .tagline {
+            color: #94a3b8;
+            font-size: 1.1em;
+            font-style: italic;
+        }
+        
+        .project {
+            background: #151b2b;
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+        }
+        
+        .project:hover {
+            border-color: #60a5fa;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(96, 165, 250, 0.1);
+        }
+        
+        .project-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .project-icon {
+            font-size: 2em;
+            margin-right: 15px;
+        }
+        
+        .project-title {
+            font-size: 1.4em;
+            color: #60a5fa;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .project-title:hover {
+            color: #93c5fd;
+        }
+        
+        .project-description {
+            color: #cbd5e1;
+            margin-bottom: 15px;
+            font-size: 0.95em;
+        }
+        
+        .project-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            font-size: 0.85em;
+            color: #64748b;
+            border-top: 1px solid #1e293b;
+            padding-top: 15px;
+            margin-top: 15px;
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+        }
+        
+        .meta-label {
+            color: #475569;
+            margin-right: 5px;
+        }
+        
+        .stack {
+            color: #94a3b8;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 2px solid #1a1f2e;
+            text-align: center;
+            color: #64748b;
+            font-size: 0.9em;
+        }
+        
+        a {
+            color: #60a5fa;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 600px) {
+            body {
+                padding: 20px 15px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .project-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .project-icon {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>pynewb</h1>
+        <p class="tagline">A lab of tiny systems – experiments in data, weather, and the cloud</p>
+    </header>
+    
+    <main>
+        <div class="project">
+            <div class="project-header">
+                <span class="project-icon">❄️</span>
+                <a href="https://snow.pynewb.com" class="project-title">Chicago Snowfall Tracker</a>
+            </div>
+            <p class="project-description">
+                Real-time lake-effect snow monitoring across the Chicagoland area. 
+                Collects data from 10 weather stations every 10 minutes during winter storms, 
+                visualized on an interactive map with historical tracking.
+            </p>
+            <div class="project-meta">
+                <div class="meta-item">
+                    <span class="meta-label">Stack:</span>
+                    <span class="stack">AWS Lambda, DynamoDB, S3, API Gateway, NWS API</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Goal:</span>
+                    <span>Learn serverless architecture & weather data APIs</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Updated:</span>
+                    <span>Nov 2025</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Template for future projects -->
+        <!--
+        <div class="project">
+            <div class="project-header">
+                <span class="project-icon">🔮</span>
+                <a href="#" class="project-title">Next Project</a>
+            </div>
+            <p class="project-description">
+                Coming soon...
+            </p>
+            <div class="project-meta">
+                <div class="meta-item">
+                    <span class="meta-label">Stack:</span>
+                    <span class="stack">TBD</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Goal:</span>
+                    <span>TBD</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Updated:</span>
+                    <span>TBD</span>
+                </div>
+            </div>
+        </div>
+        -->
+    </main>
+    
+    <footer>
+        <p>Each project is a sandbox for learning—built with free tiers, designed for curiosity.</p>
+    </footer>
+</body>
+</html>
