@@ -41,3 +41,11 @@ module "precipitation" {
 output "api_url" {
   value = module.precipitation.api_url
 }
+
+module "github_oidc" {
+  source = "./modules/github_oidc"
+}
+
+output "github_role_arn" {
+  value = module.github_oidc.github_role_arn
+}

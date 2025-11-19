@@ -1,8 +1,8 @@
-name: Deploy Dev
+name: Deploy Prod
 
 on:
   push:
-    branches: [ dev ]
+    branches: [ main ]
   workflow_dispatch:
 
 permissions:
@@ -68,7 +68,7 @@ jobs:
         
       - name: Terraform Apply
         working-directory: terraform
-        run: terraform apply -auto-approve -var="environment=dev"
+        run: terraform apply -auto-approve -var="environment=prod"
         
       - name: Get API URL
         working-directory: terraform

@@ -53,6 +53,10 @@ def get_station_data(station_code):
     """
     url = f'https://api.weather.gov/stations/{station_code}/observations/latest'
     
+    if not url.lower().startswith('https://'):
+        print(f"Skipping insecure URL: {url}")
+        return None
+
     try:
         req = request.Request(url)
         # NWS API requires a User-Agent header
