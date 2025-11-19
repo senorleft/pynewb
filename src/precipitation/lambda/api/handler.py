@@ -33,9 +33,9 @@ def lambda_handler(event, context):
         
         if station_param:
             # Fetch history for specific station (last 24 hours)
-            # Note: Scan is still inefficient. In production, use Query on GSI.
-            response = table.scan(
-                FilterExpression=Key('station_id').eq(station_param)
+            # Using Query is efficient because station_id is the partition key
+            response = table.query(
+                KeyConditionExpression=Key('station_id').eq(station_param)
             )
             items = response.get('Items', [])
             # Sort by timestamp descending
