@@ -1,0 +1,91 @@
+name: Deploy Dev
+
+on:
+  push:
+    branches: [ dev ]
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_REGION: us-east-1
+  TF_VERSION: 1.5.7
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+          
+      - name: Install Bandit
+        run: pip install bandit
+        
+      - name: Run Bandit (Python Security)
+        run: bandit -r src/precipitation/lambda -ll
+        
+      - name: Run Trivy (IaC Security)
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          hide-progress: false
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH'
+
+  deploy:
+    needs: security-scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+          
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+          
+      - name: Terraform Init
+        working-directory: terraform
+        run: terraform init
+        
+      - name: Terraform Validate
+        working-directory: terraform
+        run: terraform validate
+        
+      - name: Terraform Apply
+        working-directory: terraform
+        run: terraform apply -auto-approve -var="environment=dev"
+        
+      - name: Get API URL
+        working-directory: terraform
+        id: get_url
+        run: |
+          API_URL=$(terraform output -raw api_url)
+          echo "API_URL=$API_URL" >> $GITHUB_ENV
+          
+      - name: Update Frontend Config
+        run: |
+          sed -i "s|const API_URL = '.*';|const API_URL = '${{ env.API_URL }}';|g" src/precipitation/frontend/index.html
+          
+      - name: Deploy Frontend (Precipitation)
+        run: |
+          aws s3 sync src/precipitation/frontend s3://snow.pynewb.com --delete
+          
+      - name: Deploy Portfolio
+        run: |
+          aws s3 sync src/portfolio s3://pynewb.com --delete

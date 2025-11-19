@@ -1,77 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chicago Snowfall Tracker - Live Storm Data</title>
-    
+    <title>Precipitation Tracker - Lake Michigan</title>
+
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    
+
     <!-- Plotly -->
     <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
-    
+
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             background: #0f172a;
             color: #e2e8f0;
         }
-        
+
         .container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
         }
-        
+
         h1 {
             text-align: center;
             margin-bottom: 10px;
             color: #60a5fa;
             font-size: 2.5em;
         }
-        
+
         .subtitle {
             text-align: center;
             color: #94a3b8;
             margin-bottom: 30px;
             font-size: 1.1em;
         }
-        
+
         .last-update {
             text-align: center;
             color: #94a3b8;
             margin-bottom: 20px;
             font-size: 0.9em;
         }
-        
+
         #map {
             height: 500px;
             border-radius: 10px;
             margin-bottom: 30px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
         }
-        
+
         .data-table {
             background: #1e293b;
             border-radius: 10px;
             padding: 20px;
             margin-bottom: 30px;
             overflow-x: auto;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
         }
-        
+
         table {
             width: 100%;
             border-collapse: collapse;
         }
-        
+
         th {
             background: #334155;
             padding: 12px;
@@ -79,33 +80,60 @@
             color: #60a5fa;
             font-weight: 600;
         }
-        
+
         td {
             padding: 12px;
             border-bottom: 1px solid #334155;
         }
-        
+
         tr:hover {
             background: #334155;
         }
-        
-        .snow-depth {
+
+        .precip-val {
             color: #60a5fa;
             font-weight: bold;
         }
-        
+
         .conditions {
             font-style: italic;
             color: #94a3b8;
         }
-        
+
+        .badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .badge-snow {
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+
+        .badge-rain {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .badge-sleet {
+            background: #f3e8ff;
+            color: #6b21a8;
+        }
+
+        .badge-none {
+            background: #f1f5f9;
+            color: #64748b;
+        }
+
         .loading {
             text-align: center;
             padding: 50px;
             font-size: 1.2em;
             color: #94a3b8;
         }
-        
+
         .error {
             background: #991b1b;
             color: #fecaca;
@@ -116,14 +144,15 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
-        <h1>❄️ Chicago Snowfall Tracker</h1>
-        <div class="subtitle">Live Lake-Effect Snow Monitoring</div>
+        <h1>🌧️ Precipitation Tracker</h1>
+        <div class="subtitle">Real-time Rain & Snow Monitoring</div>
         <div class="last-update" id="lastUpdate">Loading data...</div>
-        
+
         <div id="map"></div>
-        
+
         <div class="data-table">
             <h2 style="margin-bottom: 20px; color: #60a5fa;">Latest Observations</h2>
             <div id="tableContainer">
@@ -134,49 +163,46 @@
 
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    
+
     <script>
-        const API_URL = 'https://39g4zotq59.execute-api.us-east-1.amazonaws.com/prod/data';
-        
-        // Initialize map centered on Chicago
-        const map = L.map('map').setView([41.8781, -87.6298], 8);
-        
+        const API_URL = 'https://d3l78wtvsa.execute-api.us-east-1.amazonaws.com/data';
+
+        // Initialize map centered on Lake Michigan
+        const map = L.map('map').setView([42.5, -87.0], 7);
+
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
+            attribution: '© OpenStreetMap contributors',
+            className: 'map-tiles'
         }).addTo(map);
-        
-        // Custom icon for snow
-        const snowIcon = L.divIcon({
-            className: 'custom-icon',
-            html: '<div style="background: #60a5fa; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; border: 3px solid white; box-shadow: 0 2px 10px rgba(0,0,0,0.5);">❄️</div>',
-            iconSize: [30, 30],
-            iconAnchor: [15, 15]
-        });
-        
+
+        function getIcon(type) {
+            let color = '#64748b';
+            let content = '☁️';
+
+            if (type === 'snow') { color = '#60a5fa'; content = '❄️'; }
+            else if (type === 'rain') { color = '#3b82f6'; content = '💧'; }
+            else if (type === 'sleet') { color = '#a855f7'; content = '🌨️'; }
+
+            return L.divIcon({
+                className: 'custom-icon',
+                html: `<div style="background: ${color}; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);">${content}</div>`,
+                iconSize: [30, 30],
+                iconAnchor: [15, 15]
+            });
+        }
+
         function convertTemp(celsius) {
             if (celsius === null || celsius === undefined) return 'N/A';
-            const fahrenheit = (celsius * 9/5) + 32;
+            const fahrenheit = (celsius * 9 / 5) + 32;
             return fahrenheit.toFixed(1) + '°F';
         }
-        
-        function convertSnowDepth(meters) {
-            if (meters === null || meters === undefined || meters === 0) return 'None';
-            const inches = meters * 39.3701;
-            return inches.toFixed(1) + '"';
+
+        function convertPrecip(mm) {
+            if (mm === null || mm === undefined) return '0.00"';
+            const inches = mm * 0.0393701;
+            return inches.toFixed(2) + '"';
         }
-        
-        function convertWindSpeed(kmh) {
-            if (kmh === null || kmh === undefined) return 'N/A';
-            const mph = kmh * 0.621371;
-            return mph.toFixed(1) + ' mph';
-        }
-        
-        function convertVisibility(meters) {
-            if (meters === null || meters === undefined) return 'N/A';
-            const miles = meters * 0.000621371;
-            return miles.toFixed(1) + ' mi';
-        }
-        
+
         function formatTime(timestamp) {
             const date = new Date(timestamp * 1000);
             return date.toLocaleString('en-US', {
@@ -187,94 +213,105 @@
                 hour12: true
             });
         }
-        
+
+        function getBadge(type) {
+            const t = (type || 'none').toLowerCase();
+            return `<span class="badge badge-${t}">${t.toUpperCase()}</span>`;
+        }
+
         async function fetchData() {
             try {
                 const response = await fetch(API_URL);
                 const data = await response.json();
-                
+
                 if (data.stations && data.stations.length > 0) {
                     updateMap(data.stations);
                     updateTable(data.stations);
-                    
+
                     const latestTime = Math.max(...data.stations.map(s => s.timestamp));
-                    document.getElementById('lastUpdate').textContent = 
+                    document.getElementById('lastUpdate').textContent =
                         `Last updated: ${formatTime(latestTime)}`;
                 } else {
-                    document.getElementById('tableContainer').innerHTML = 
+                    document.getElementById('tableContainer').innerHTML =
                         '<div class="loading">No data available yet. Check back in 10 minutes.</div>';
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);
-                document.getElementById('tableContainer').innerHTML = 
+                document.getElementById('tableContainer').innerHTML =
                     '<div class="error">Error loading data. Please refresh the page.</div>';
             }
         }
-        
+
         function updateMap(stations) {
+            // Clear existing markers if we were tracking them (omitted for simplicity)
+
             stations.forEach(station => {
                 if (station.latitude && station.longitude) {
-                    const marker = L.marker([station.latitude, station.longitude], {icon: snowIcon})
-                        .addTo(map);
-                    
+                    const marker = L.marker([station.latitude, station.longitude], {
+                        icon: getIcon(station.precip_type)
+                    }).addTo(map);
+
                     const popupContent = `
                         <strong>${station.station_name}</strong><br>
+                        <div style="margin: 5px 0;">${getBadge(station.precip_type)}</div>
                         <strong>Conditions:</strong> ${station.conditions || 'Unknown'}<br>
                         <strong>Temp:</strong> ${convertTemp(station.temperature_c)}<br>
-                        <strong>Snow Depth:</strong> ${convertSnowDepth(station.snow_depth_m)}<br>
-                        <strong>Wind:</strong> ${convertWindSpeed(station.wind_speed_kmh)}<br>
-                        <strong>Visibility:</strong> ${convertVisibility(station.visibility_m)}<br>
+                        <strong>Precip (1h):</strong> ${convertPrecip(station.precip_1h_mm)}<br>
+                        <strong>Wind:</strong> ${station.wind_speed_kmh || 0} km/h<br>
                         <em>${formatTime(station.timestamp)}</em>
                     `;
-                    
+
                     marker.bindPopup(popupContent);
                 }
             });
         }
-        
+
         function updateTable(stations) {
-            // Sort by snow depth (highest first)
-            stations.sort((a, b) => (b.snow_depth_m || 0) - (a.snow_depth_m || 0));
-            
+            // Sort by precip 1h (highest first)
+            stations.sort((a, b) => (b.precip_1h_mm || 0) - (a.precip_1h_mm || 0));
+
             let tableHTML = `
                 <table>
                     <thead>
                         <tr>
                             <th>Station</th>
+                            <th>Type</th>
                             <th>Conditions</th>
                             <th>Temp</th>
-                            <th>Snow Depth</th>
+                            <th>Precip (1h)</th>
+                            <th>Precip (3h)</th>
                             <th>Wind</th>
-                            <th>Visibility</th>
                             <th>Time</th>
                         </tr>
                     </thead>
                     <tbody>
             `;
-            
+
             stations.forEach(station => {
                 tableHTML += `
                     <tr>
                         <td><strong>${station.station_name}</strong></td>
+                        <td>${getBadge(station.precip_type)}</td>
                         <td class="conditions">${station.conditions || 'Unknown'}</td>
                         <td>${convertTemp(station.temperature_c)}</td>
-                        <td class="snow-depth">${convertSnowDepth(station.snow_depth_m)}</td>
-                        <td>${convertWindSpeed(station.wind_speed_kmh)}</td>
-                        <td>${convertVisibility(station.visibility_m)}</td>
+                        <td class="precip-val">${convertPrecip(station.precip_1h_mm)}</td>
+                        <td>${convertPrecip(station.precip_3h_mm)}</td>
+                        <td>${station.wind_speed_kmh || 0} km/h</td>
                         <td>${formatTime(station.timestamp)}</td>
                     </tr>
                 `;
             });
-            
+
             tableHTML += '</tbody></table>';
             document.getElementById('tableContainer').innerHTML = tableHTML;
         }
-        
+
         // Initial load
         fetchData();
-        
-        // Refresh every 2 minutes
-        setInterval(fetchData, 120000);
+
+        // Refresh every 5 minutes
+        setInterval(fetchData, 300000);
     </script>
 </body>
+
 </html>

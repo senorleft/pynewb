@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.venv/
+venv/
+env/
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.backup
+.terraform.lock.hcl
+var.tfvars
+*.tfvars
+
+# AWS SAM
+.aws-sam/
+
+# IDE
+.vscode/
+.idea/
+.DS_Store

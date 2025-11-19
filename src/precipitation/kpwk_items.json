@@ -1,0 +1,289 @@
+{
+    "Items": [
+        {
+            "station_id": {
+                "S": "KPWK"
+            },
+            "conditions": {
+                "S": "Cloudy and Windy"
+            },
+            "wind_speed_kmh": {
+                "N": "31.5"
+            },
+            "longitude": {
+                "N": "-87.9015"
+            },
+            "temperature_c": {
+                "N": "1"
+            },
+            "observation_time": {
+                "S": "2025-11-09T19:45:00+00:00"
+            },
+            "latitude": {
+                "N": "42.1142"
+            },
+            "visibility_m": {
+                "N": "14484.1"
+            },
+            "station_name": {
+                "S": "Chicago Executive"
+            },
+            "timestamp": {
+                "N": "1762718660"
+            }
+        },
+        {
+            "station_id": {
+                "S": "KPWK"
+            },
+            "conditions": {
+                "S": "Cloudy and Windy"
+            },
+            "wind_speed_kmh": {
+                "N": "31.5"
+            },
+            "longitude": {
+                "N": "-87.9015"
+            },
+            "temperature_c": {
+                "N": "1"
+            },
+            "observation_time": {
+                "S": "2025-11-09T20:00:00+00:00"
+            },
+            "latitude": {
+                "N": "42.1142"
+            },
+            "visibility_m": {
+                "N": "16093.44"
+            },
+            "station_name": {
+                "S": "Chicago Executive"
+            },
+            "timestamp": {
+                "N": "1762719260"
+            }
+        },
+        {
+            "station_id": {
+                "S": "KPWK"
+            },
+            "conditions": {
+                "S": "Cloudy"
+            },
+            "wind_speed_kmh": {
+                "N": "22.212"
+            },
+            "longitude": {
+                "N": "-87.9015"
+            },
+            "temperature_c": {
+                "N": "1"
+            },
+            "observation_time": {
+                "S": "2025-11-09T20:05:00+00:00"
+            },
+            "latitude": {
+                "N": "42.1142"
+            },
+            "visibility_m": {
+                "N": "16093.44"
+            },
+            "station_name": {
+                "S": "Chicago Executive"
+            },
+            "timestamp": {
+                "N": "1762719860"
+            }
+        },
+        {
+            "station_id": {
+                "S": "KPWK"
+            },
+            "conditions": {
+                "S": "Cloudy"
+            },
+            "wind_speed_kmh": {
+                "N": "25.92"
+            },
+            "longitude": {
+                "N": "-87.9015"
+            },
+            "temperature_c": {
+                "N": "1"
+            },
+            "observation_time": {
+                "S": "2025-11-09T20:20:00+00:00"
+            },
+            "latitude": {
+                "N": "42.1142"
+            },
+            "visibility_m": {
+                "N": "16093.44"
+            },
+            "station_name": {
+                "S": "Chicago Executive"
+            },
+            "timestamp": {
+                "N": "1762720460"
+            }
+        },
+        {
+            "station_id": {
+                "S": "KPWK"
+            },
+            "conditions": {
+                "S": "Cloudy"
+            },
+            "wind_speed_kmh": {
+                "N": "29.628"
+            },
+            "longitude": {
+                "N": "-87.9015"
+            },
+            "temperature_c": {
+                "N": "1"
+            },
+            "observation_time": {
+                "S": "2025-11-09T20:25:00+00:00"
+            },
+            "latitude": {
+                "N": "42.1142"
+            },
+            "visibility_m": {
+                "N": "16093.44"
+            },
+            "station_name": {
+                "S": "Chicago Executive"
+            },
+            "timestamp": {
+                "N": "1762721060"
+            }
+        },
+        {
+            "station_id": {
+                "S": "KPWK"
+            },
+            "conditions": {
+                "S": "Cloudy and Windy"
+            },
+            "wind_speed_kmh": {
+                "N": "33.336"
+            },
+            "longitude": {
+                "N": "-87.9015"
+            },
+            "temperature_c": {
+                "N": "1"
+            },
+            "observation_time": {
+                "S": "2025-11-09T20:35:00+00:00"
+            },
+            "latitude": {
+                "N": "42.1142"
+            },
+            "visibility_m": {
+                "N": "16093.44"
+            },
+            "station_name": {
+                "S": "Chicago Executive"
+            },
+            "timestamp": {
+                "N": "1762721660"
+            }
+        },
+        {
+            "station_id": {
+                "S": "KPWK"
+            },
+            "conditions": {
+                "S": "Cloudy and Windy"
+            },
+            "wind_speed_kmh": {
+                "N": "33.336"
+            },
+            "longitude": {
+                "N": "-87.9015"
+            },
+            "temperature_c": {
+                "N": "1"
+            },
+            "observation_time": {
+                "S": "2025-11-09T20:45:00+00:00"
+            },
+            "latitude": {
+                "N": "42.1142"
+            },
+            "visibility_m": {
+                "N": "16093.44"
+            },
+            "station_name": {
+                "S": "Chicago Executive"
+            },
+            "timestamp": {
+                "N": "1762722260"
+            }
+        },
+        {
+            "station_id": {
+                "S": "KPWK"
+            },
+            "conditions": {
+                "S": "Cloudy"
+            },
+            "wind_speed_kmh": {
+                "N": "29.628"
+            },
+            "longitude": {
+                "N": "-87.9015"
+            },
+            "observation_time": {
+                "S": "2025-11-09T21:00:00+00:00"
+            },
+            "latitude": {
+                "N": "42.1142"
+            },
+            "visibility_m": {
+                "N": "16093.44"
+            },
+            "station_name": {
+                "S": "Chicago Executive"
+            },
+            "timestamp": {
+                "N": "1762722859"
+            }
+        },
+        {
+            "station_id": {
+                "S": "KPWK"
+            },
+            "conditions": {
+                "S": "Cloudy"
+            },
+            "wind_speed_kmh": {
+                "N": "27.792"
+            },
+            "longitude": {
+                "N": "-87.9015"
+            },
+            "observation_time": {
+                "S": "2025-11-09T21:05:00+00:00"
+            },
+            "latitude": {
+                "N": "42.1142"
+            },
+            "visibility_m": {
+                "N": "16093.44"
+            },
+            "station_name": {
+                "S": "Chicago Executive"
+            },
+            "timestamp": {
+                "N": "1762723460"
+            }
+        }
+    ],
+    "Count": 9,
+    "ScannedCount": 9,
+    "ConsumedCapacity": null
+}
