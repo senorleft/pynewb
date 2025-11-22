@@ -238,7 +238,11 @@
             } catch (error) {
                 console.error('Error fetching data:', error);
                 document.getElementById('tableContainer').innerHTML =
-                    '<div class="error">Error loading data. Please refresh the page.</div>';
+                    `<div class="error">
+                        <strong>Error loading data:</strong><br>
+                        ${error.message}<br><br>
+                        <em>Please check the console for more details.</em>
+                    </div>`;
             }
         }
 
